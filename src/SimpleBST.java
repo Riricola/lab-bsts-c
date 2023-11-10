@@ -16,7 +16,7 @@ public class SimpleBST<K,V> implements SimpleMap<K,V> {
   /**
    * The root of our tree. Initialized to null for an empty tree.
    */
-  BSTNode<K,V> root;
+  public BSTNode<K,V> root;
 
   /**
    * The comparator used to determine the ordering in the tree.
@@ -63,6 +63,7 @@ public class SimpleBST<K,V> implements SimpleMap<K,V> {
 
   @Override
   public V set(K key, V value) {
+    //if(root)
     return null;        // STUB
   } // set(K,V)
 
@@ -71,6 +72,7 @@ public class SimpleBST<K,V> implements SimpleMap<K,V> {
     if (key == null) {
       throw new NullPointerException("null key");
     } // if
+
     return get(key, root);
   } // get(K,V)
 
@@ -206,7 +208,7 @@ public class SimpleBST<K,V> implements SimpleMap<K,V> {
       @Override
       public BSTNode<K,V> next() {
         checkInit();
-        // STUB
+        // TODO Auto-generated method stub
         return null;
       } // next();
 
