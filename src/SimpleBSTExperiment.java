@@ -38,7 +38,7 @@ public class SimpleBSTExperiment {
 
     removeExperiment(pen, example, "vicuna"); // leaf?
     removeExperiment(pen, example, "koala"); // middle?
-    removeExperiment(pen, example, "civet"); // root?
+    removeExperiment(pen, example, "dingo"); // root?
 
   } // main(String[])
 

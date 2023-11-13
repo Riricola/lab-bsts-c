@@ -61,11 +61,69 @@ public class SimpleBST<K,V> implements SimpleMap<K,V> {
   // | SimpleMap methods |
   // +-------------------+
 
+  /* 
   @Override
   public V set(K key, V value) {
-    //if(root)
-    return null;        // STUB
+    BSTNode<K,V> current = root;
+    V temp = null;
+    if(root == null){
+      root = new BSTNode<K, V>(key, value);
+    } else {
+      current = root;
+      while(current != null){
+        if(this.comparator.compare(current.key, key) == 0){
+          temp = current.value;
+          current.value = value;
+          
+        } else if (this.comparator.compare(current.key, key) < 0){
+          if(current.left != null){
+            current = current.left;
+          } else{
+            current.left = new BSTNode<K,V>(key, value);
+            size++;
+            return null;
+          }
+        } else if (this.comparator.compare(current.key, key) > 0){
+          if(current.right != null){
+            current = current.right;
+          } else{
+            current.right = new BSTNode<K,V>(key, value);
+            size++;
+            return null;
+          }//if
+        }//if
+      }//while
+    }//if
+
+    return temp;
   } // set(K,V)
+  */
+
+  public BSTNode<K,V> set2Helper(BSTNode<K,V> node, K key, V value){
+    if (node == null){
+      this.cachedValue = null;
+      size++;
+      return new BSTNode<K,V>(key, value);  
+    }
+    else{
+       if((this.comparator.compare(node.key, key)) == 0){
+        this.cachedValue = node.value;
+        node.value = value;
+      }
+       else if((this.comparator.compare(node.key, key)) < 0){
+        node.left = set2Helper(node.left, key, value);
+       }
+       else if((this.comparator.compare(node.key, key)) > 0){
+        node.right = set2Helper(node.right, key, value);
+       }
+    }
+    return node;
+  }
+  @Override
+  public V set(K key, V value) {
+      root = set2Helper(root, key, value);
+      return this.cachedValue;
+      }
 
   @Override
   public V get(K key) {
@@ -88,8 +146,58 @@ public class SimpleBST<K,V> implements SimpleMap<K,V> {
 
   @Override
   public V remove(K key) {
-    return null;        // STUB
+    root = removeHelper(root, key);
+    return cachedValue;
   } // remove(K)
+
+  public BSTNode<K,V> removeHelper(BSTNode<K,V> node, K key){
+    if(node == null){
+      cachedValue = null;
+      return null;
+    } else{
+      cachedValue = node.value;
+      if(this.comparator.compare(node.key, key) == 0){
+        if(node.left == null && node.right == null){
+          return null;
+        } else if(node.left == null){
+          return node.right;
+        } else if(node.right == null){
+          return node.left;
+        } else{
+          return findLast(node);
+        }//if
+      } else if(this.comparator.compare(node.key, key) < 0){
+        node.left = removeHelper(node.left, key);
+      } else if (this.comparator.compare(node.key, key) > 0){
+        node.right = removeHelper(node.right, key);
+      }//if
+    }//if
+
+    return node;
+  }//
+
+  //helper that checks for largest left or smallest right
+  public BSTNode<K,V> findLast( BSTNode<K,V> node){
+    BSTNode<K,V> temp = node;
+    while(node != null){
+      if(node.right == null){
+        node = node.left;
+        if(this.comparator.compare(node.key, temp.key) > 0){
+          temp = node;
+        }//if
+      }//if right is empty
+      else if(node.left == null){
+        node = node.right;
+        if(this.comparator.compare(node.key, temp.key) < 0){
+          temp = node;
+        }//if
+      }
+      
+    }//while
+    return temp;
+  }
+
+
 
   @Override
   public Iterator<K> keys() {
